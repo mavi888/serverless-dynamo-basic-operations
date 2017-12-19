@@ -1,5 +1,8 @@
 service: serverless-dynamo-basic-operations
 
+plugins:
+  - serverless-dynamodb-local
+
 custom:
   settings:
     ITEMS_DYNAMODB_TABLE: sls-basic-operations-items-table
@@ -45,7 +48,7 @@ functions:
     events:
       - http:
           path: item/{itemId}
-          method: put            
+          method: put
 
 resources:
   Resources:
