@@ -4,15 +4,19 @@ plugins:
   - serverless-dynamodb-local
 
 custom:
+  myStage: ${opt:stage, self:provider.stage}
   settings:
-    ITEMS_DYNAMODB_TABLE: sls-basic-operations-items-table
+    dev:
+      ITEMS_DYNAMODB_TABLE: sls-basic-operations-items-dev
+    prod:
+      ITEMS_DYNAMODB_TABLE: sls-basic-operations-items-prod
 
 provider:
   name: aws
   runtime: nodejs6.10
   profile: default
   region: eu-west-1
-  environment: ${self:custom.settings}
+  environment: ${self:custom.settings.${self:custom.myStage}}
 
   iamRoleStatements:
     - Effect: "Allow"
@@ -22,7 +26,7 @@ provider:
         - "dynamodb:UpdateItem"
         - "dynamodb:DeleteItem"
       Resource:
-        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.ITEMS_DYNAMODB_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.${self:custom.myStage}.ITEMS_DYNAMODB_TABLE}"
 
 functions:
   saveItem:
@@ -64,4 +68,4 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:custom.settings.ITEMS_DYNAMODB_TABLE}
+        TableName: ${self:custom.settings.${self:custom.myStage}.ITEMS_DYNAMODB_TABLE}
