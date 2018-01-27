@@ -25,6 +25,7 @@ provider:
         - "dynamodb:PutItem"
         - "dynamodb:UpdateItem"
         - "dynamodb:DeleteItem"
+        - "dynamodb:ListStreams"
       Resource:
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.${self:custom.myStage}.ITEMS_DYNAMODB_TABLE}"
 
@@ -53,6 +54,17 @@ functions:
       - http:
           path: item/{itemId}
           method: put
+  triggerStream:
+    handler: handler.triggerStream
+    events:
+       - stream:
+          type: dynamodb
+          batchSize: 1
+          startingPosition: LATEST
+          arn:
+            Fn::GetAtt:
+              - ImagesTable
+              - StreamArn
 
 resources:
   Resources:
@@ -69,3 +81,5 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:custom.settings.${self:custom.myStage}.ITEMS_DYNAMODB_TABLE}
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE

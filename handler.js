@@ -50,3 +50,13 @@ module.exports.updateItem = (event, context, callback) => {
     callback(null, createResponse(200, response));
   });
 };
+
+module.exports.triggerStream = (event, context, callback) => {
+  console.log('trigger stream was called');
+
+  const eventData = event.Records[0];
+  //console.log(eventData);
+
+  console.log(eventData.dynamodb.NewImage);
+  callback(null, null);
+};
