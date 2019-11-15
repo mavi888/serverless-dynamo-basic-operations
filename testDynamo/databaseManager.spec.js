@@ -21,13 +21,12 @@ afterAll(() => {
 });
 
 describe('Test database save and get item', () => {
-  const item = {
-    itemId: 'itemId',
-    name: 'itemName',
-    status: 'itemStatus'
-  };
-
   it('save an item', done => {
+    const item = {
+      itemId: 'itemId',
+      name: 'itemName',
+      status: 'itemStatus'
+    };
     databaseManager.saveItem(item).then(result => {
       assert.equal('itemId', result);
       done();
@@ -35,10 +34,15 @@ describe('Test database save and get item', () => {
   });
 
   it('get an item', done => {
+    const item = {
+      itemId: 'itemId',
+      name: 'itemName',
+      status: 'itemStatus'
+    };
     databaseManager.getItem('itemId').then(result => {
       assert.equal(item.itemId, result.itemId);
       assert.equal(item.name, result.name);
-      assert.equal(item.status, result.status);
+      assert.equal(item.status, result. s);
       done();
     });
   });
